@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta content="" name="description">
+    <meta content="" name="author">
+    <link href="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/favicon.ico" rel="icon">
+    <link href="https://getbootstrap.com/docs/3.4/examples/navbar-static-top/" rel="canonical">
+
+    <title>任务</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../css/bootstrap.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/css/ie10-viewport-bug-workaround.css"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/examples/navbar-static-top/navbar-static-top.css"
+          rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]>
+    <script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/js/ie8-responsive-file-warning.js"></script>
+    <![endif]-->
+    <script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div id="app">
+    <!-- Static navbar -->
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button aria-controls="navbar" aria-expanded="false" class="navbar-toggle collapsed"
+                        data-target="#navbar"
+                        data-toggle="collapse" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">看板</a>
+            </div>
+            <div class="navbar-collapse collapse" id="navbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">首页</a></li>
+                    <li><a href="#">关于</a></li>
+                    <li><a href="#">联系我们</a></li>
+                    <li class="dropdown">
+                        <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown"
+                           href="#"
+                           role="button">工作流 <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">待办故事</a></li>
+                            <li><a href="#">迭代任务</a></li>
+                            <li><a href="#">后端开发</a></li>
+                            <li class="divider" role="separator"></li>
+                            <li class="dropdown-header">前端开发</li>
+                            <li><a href="#">软件测试</a></li>
+                            <li><a href="#">运行维护</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><p id="current_user"></p></li>
+                    <li ></li>
+                    <li><!-- 登录模块 -->
+                        <div v-show="!loginIf">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                    data-target="#myModal1">
+                                登录
+                            </button>
+                        </div>
+                        <div title="注销" v-if="loginIf">
+                            <button @click="dellogin()" class="btn btn-success"><span
+                                    class="glyphicon glyphicon-open" aria-hidden="true"></span>注销
+                            </button>
+                        </div></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container-fluid">
+
+        <div class="col-md-4">
+            <div class="panel panel-success">
+                <!-- Default panel contents -->
+                <div class="panel-heading">功能操作区</div>
+                <div class="panel-body">
+                    <div class="list-group">
+                        <a class="list-group-item" href="/sub/flow/flow.html">
+                            工作流管理
+                        </a>
+                        <a class="list-group-item" href="/sub/story/story.html">故事管理</a>
+                        <a class="list-group-item active" href="/sub/task/task.html">任务管理</a>
+                        <a class="list-group-item" href="/sub/user/user.html">用户管理</a>
+                        <a class="list-group-item" href="/sub/rule/rule.html">规则管理</a>
+                        <a class="list-group-item" href="/sub/kanban/kanban.html">看板墙</a>
+<!--                        <button @click="currentUser" class="btn btn-primary">查询登录</button>-->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">任务界面</div>
+                <div class="panel-body">
+                    <div class="panel panel-success">
+
+                        <div class="panel-heading">添加任务</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <table class="table table-condensed">
+                                    <input placeholder="标题" class="form-control"
+                                           style="width: 32%;float: left;margin-right: 2%" type="text"
+                                           v-model="snapTask.title">
+                                    <input placeholder="负责人" class="form-control"
+                                           style="width: 32%;float: left;margin-right: 2%" type="text"
+                                           v-model="snapTask.po">
+                                    <input placeholder="发布者" class="form-control" style="width: 32%" type="text"
+                                           v-model="snapTask.sponsor"><br>
+                                    <textarea placeholder="内容" class="form-control" rows="3"
+                                              v-model="snapTask.content"></textarea>
+                                    <br>
+
+                                    <input placeholder="预计完成时间" class="form-control"
+                                           style="width: 30%;float: left;margin-right: 2%"
+                                           type="datetime-local"
+                                           v-model="snapTask.ectime">
+                                    <input placeholder="故事id" class="form-control"
+                                           style="width: 15%;float: left;margin-right: 2%" type="text"
+                                           v-model="snapTask.storyid">
+                                    <input placeholder="估算点" class="form-control"
+                                           style="width: 15%;float: left;margin-right: 2%" type="text"
+                                           v-model="snapTask.estimate">
+                                    <input placeholder="工作流id" class="form-control"
+                                           style="width: 16%;float: left;margin-right: 2%"
+                                           type="text"
+                                           v-model="snapTask.flowid">
+                                    <input placeholder="权重排序" class="form-control"
+                                           style="width: 16%"
+                                           type="text"
+                                           v-model="snapTask.sort">
+                                    <input placeholder="任务状态" class="form-control"
+                                           type="text"
+                                           v-model="snapTask.state">
+<!--                                    <div class="btn-group" style="width: 20%">-->
+<!--                                        <button type="button" class="btn btn-default dropdown-toggle"-->
+<!--                                                data-toggle="dropdown"-->
+<!--                                                aria-haspopup="true" aria-expanded="false">-->
+<!--                                            任务状态 <span class="caret"></span>-->
+<!--                                        </button>-->
+<!--                                        <ul class="dropdown-menu">-->
+<!--                                            <input type="radio" name="state" checked="checked" v-model="editTask.state"-->
+<!--                                                   value="待启动">待启动-->
+<!--                                            <br>-->
+<!--                                            <input type="radio" name="state" checked="checked" v-model="editTask.state"-->
+<!--                                                   value="启动中">启动中-->
+<!--                                            <br>-->
+<!--                                            <input type="radio" name="state" checked="checked" v-model="editTask.state"-->
+<!--                                                   value="已完成">已完成-->
+<!--                                            <br>-->
+<!--                                            <input type="radio" name="state" checked="checked" v-model="editTask.state"-->
+<!--                                                   value="测试中">测试中-->
+<!--                                        </ul>-->
+<!--                                    </div>-->
+
+                                    <br/>
+                                    <div>
+                                        <button @click="addTask()" class="btn btn-success"><span
+                                                class="glyphicon glyphicon-open" aria-hidden="true"></span>发布
+                                        </button>
+
+                                    </div>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="form-group">
+                            <br>
+                            <input id="task" placeholder="搜索栏" class="form-control" style="width: 40%;margin: 0 auto"
+                                   name="task" type="text"><br>
+                            <button @click="inquiry" class="btn btn-default">查询</button>
+                            <button @click="loadAllTask" class="btn btn-primary">查询全部</button>
+                            <button @click="inquiryTask" class="btn btn-primary">查询任务</button>
+                        </div>
+                    </div>
+
+
+                    <table class="table table-hover">
+                        <tr>
+                            <th>主键</th>
+                            <th>标题</th>
+                            <th>内容</th>
+                            <th>负责人</th>
+                            <th>发起人</th>
+                            <th>发布时间</th>
+                            <th>预计完成时间</th>
+                            <th>实际完成时间</th>
+                            <th>故事id</th>
+                            <th>估算点</th>
+                            <th>工作流id</th>
+                            <th>状态</th>
+                            <th>权重排序</th>
+                            <th>功能区</th>
+                        </tr>
+                        <tr :key="t.id" v-for="(t,index) in tasks">
+                            <td>{{t.id}}</td>
+                            <td>{{t.title}}</td>
+                            <td>{{t.content}}</td>
+                            <td>{{t.po}}</td>
+                            <td>{{t.sponsor}}</td>
+                            <td>{{t.publishtime}}</td>
+                            <td>{{t.ectime}}</td>
+                            <td>{{t.actime}}</td>
+                            <td>{{t.storyid}}</td>
+                            <td>{{t.estimate}}</td>
+                            <td>{{t.flowid}}</td>
+                            <td>{{t.state}}</td>
+                            <td>{{t.sort}}</td>
+                            <td>
+                                <button @click="deleteTaskById(t.id,index)" class="btn btn-danger">删除</button>
+
+                                <!-- Button trigger modal -->
+                                <button @click="editTaskById(t.id,index)" type="button" class="btn btn-primary"
+                                        data-toggle="modal" data-target="#myModal">
+                                    编辑
+                                </button>
+
+                                <button @click="endTask(t.id)" class="btn btn-success">更新</button>
+                            </td>
+                        </tr>
+
+                    </table>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog modal-sm" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                            aria-hidden="true">&times;</span></button>
+                                    <h5 class="modal-title" id="myModalLabel1">看板后台系统</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <div title="登录">
+                                        <input placeholder="账号" class="form-control"
+                                               type="text"
+                                               v-model="user.username"><br>
+                                        <input placeholder="密码" class="form-control"
+                                               type="password"
+                                               v-model="user.password">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                    <button @click="login()" class="btn btn-primary"><span
+                                        class="glyphicon glyphicon-open" aria-hidden="true"></span>登录
+                                </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                            aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">修改信息</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <input class="form-control" type="hidden" v-model="editTask.id">
+                                    <label for="updatatTitle">标题</label><input id="updatatTitle" class="form-control"
+                                                                               type="text" v-model="editTask.title">
+                                    <label for="updatatTitle">内容</label><input class="form-control" type="text"
+                                                                               v-model="editTask.content">
+                                    <label for="updatatTitle">发布人</label><input class="form-control" type="text"
+                                                                                v-model="editTask.po">
+                                    <label for="updatatTitle">负责人</label><input class="form-control" type="text"
+                                                                                v-model="editTask.sponsor">
+
+                                    <label for="updatatTitle">发布时间</label><input class="form-control" readonly
+                                                                                 type="text"
+                                                                                 v-model="editTask.publishtime">
+                                    <label for="updatatTitle">预计时间</label><input class="form-control" readonly
+                                                                                 type="text"
+                                                                                 v-model="editTask.ectime">
+                                    <label for="updatatTitle">完成时间</label><input class="form-control" readonly
+                                                                                 type="text"
+                                                                                 v-model="editTask.actime">
+
+                                    <label for="updatatTitle">所属故事</label> <input class="form-control" type="text"
+                                                                                  v-model="editTask.storyid">
+                                    <label for="updatatTitle">估算点</label><input class="form-control" type="text"
+                                                                                v-model="editTask.estimate">
+                                    <label for="updatatTitle">所属工作流</label><input class="form-control" type="text"
+                                                                                  v-model="editTask.flowid">
+                                    <label for="updatatTitle">任务状态</label><input class="form-control" type="text"
+                                                                                 v-model="editTask.state">
+                                    <label for="updatatTitle">权重排序</label><input class="form-control" type="text"
+                                                                                 v-model="editTask.sort">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                    <button @click="updateTask" type="button" class="btn btn-primary">保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script crossorigin="anonymous"
+            integrity="sha384-Nj1D6pu2WnJojj+67GiU9ZFNwbl7bUWX5Kj5MS22C8bGjllemM9pvQyvj14zJb58"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+            src="../../js/jquery-1.12.4.min.js"></script>
+    <script>window.jQuery || document.write('<script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="../../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="../../js/vue.js"></script>
+    <script>
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                user: {
+                    id: 0,
+                    name: '',
+                    username: '',
+                    password: '',
+                    jobno: '',
+                    position: ''
+                },
+                tasks: [],
+                tasklist: {
+                    id: 0,
+                    title: '',
+                    content: '',
+                    po: '',
+                    sponsor: '',
+                    publishtime: '',
+                    ectime: '',
+                    actime: '',
+                    storyid: '',
+                    estimate: '',
+                    flowid: '',
+                    state: '',
+                    sort: '',
+                    flow: '',
+                    sponsorList: ''
+                },
+                //修改用临时对象
+                editTask: {
+                    id: 0,
+                    title: '',
+                    content: '',
+                    po: '',
+                    sponsor: '',
+                    publishtime: '',
+                    ectime: '',
+                    actime: '',
+                    storyid: '',
+                    estimate: '',
+                    flowid: '',
+                    state: '',
+                    sort: ''
+                },
+                //添加用临时对象
+                snapTask: {
+                    id: 0,
+                    title: '',
+                    content: '',
+                    po: '',
+                    sponsor: '',
+                    publishtime: '',
+                    ectime: '',
+                    actime: '',
+                    storyid: '',
+                    estimate: '',
+                    flowid: '',
+                    state: '',
+                    sort: '',
+                },
+                hideEditView: true, //是否显示编辑视图
+                loginIf: false//用户视图
+            },
+            methods: {
+                loadAllTask: function () {
+                    const self = this;
+                    $.getJSON("/task/all", function (r) {
+                        console.log(r);
+                        self.tasks = r.data;
+
+                    })
+                }
+                ,
+                dellogin: function () {
+                    const self = this;
+                    $.getJSON("/login/logout", function (r) {
+                        self.user = null;
+                        // const currentUser = document.getElementById("current_user");
+                        // currentUser.innerHTML = "请登录";
+                        app.currentUser();
+                    })
+                    location.href = "/login.html";
+                },
+                //登录
+                login: function () {
+                    const self = this;
+                    $.ajax({
+                        url: '/login/doLogin',
+                        type: 'POST',
+                        data: JSON.stringify(this.user), //转换为JSON
+                        contentType: 'application/json;charset=utf-8',
+                        dataType: 'json',
+                        success: (r) => {
+                            if (!r.result){
+                                alert('登陆失败,请检查账号密码');
+                            }else{
+                                self.user = r.data;
+                                console.log(this.user);
+                                app.currentUser();
+                                $('#myModal1').modal('hide');
+                            }
+
+                        },
+                        error: () => {
+                            alert('提交请求失败');
+                        }
+                    })
+                }
+                ,
+                //显示当前用户
+                currentUser: function () {
+                    const self = this;
+                    $.getJSON("/user/currentUser", function (r) {
+                        console.log(r.result);
+                        if (r.result == true) {
+                            // this.loginIf = true;
+                            const currentUser = document.getElementById("current_user");
+                            currentUser.innerHTML = "欢迎您! " + r.data.name;
+                            self.loginIf = true;
+                            app.loadAllTask();
+                        } else {
+                            $('#myModal1').modal('show');
+                            self.loginIf = false;
+                            const currentUser = document.getElementById("current_user");
+                            currentUser.innerHTML = "请登录";
+
+                            // location.href = "/login.html";
+                        }
+                    })
+                }
+                ,
+                inquiryTask: function () {
+                    const self = this;
+                    $.getJSON("/task/currentUserTasks/" + this.user.id, function (r) {
+                        console.log(r);
+                        self.tasks = r.data;
+
+                    })
+
+                }
+                ,
+                //根据id删除任务
+                deleteTaskById: function (id, index) {
+                    var self = this;
+                    $.getJSON("/task/delete/" + id, function (r) {
+                        self.tasks.splice(index, 1);
+                    })
+                }
+                ,
+                //模糊查询
+                inquiry: function () {
+                    var self = this;
+                    var value = $("#task").val();
+                    $.getJSON("/task/findByName/" + value, function (r) {
+                        console.log(r);
+                        self.tasks = r.data;
+
+                    })
+                }
+                ,
+                //添加一个任务
+                addTask: function () {
+                    $.ajax({
+                        url: '/task/save',
+                        type: 'POST',
+                        data: JSON.stringify(this.snapTask), //转换为JSON
+                        contentType: 'application/json;charset=utf-8',
+                        dataType: 'json',
+                        success: (r) => {
+                            if (r.result){
+                                this.tasks.push(r.data);
+                                console.log(r);
+                            }else {
+                                alert('添加失败');
+                            }
+
+                        },
+                        error: () => {
+                            alert('提交请求失败');
+                        }
+                    })
+                }
+                ,
+                //解构
+                editTaskById: function (id, idx) {
+                    this.hideEditView = !this.hideEditView;//不隐藏
+                    this.tasklist = this.tasks[idx];
+                    delete this.tasklist.flow;
+                    delete this.tasklist.sponsorList;
+                    this.editTask = this.tasklist;
+                    console.log(this.editTask);
+                }
+                ,
+                addHidden: function () {
+                    this.addHidden = !this.addHidden;//不隐藏
+                }
+                ,
+                //更新任务
+                updateTask: function () {
+                    $.ajax({
+                        url: '/task/update',
+                        type: 'POST',
+                        data: JSON.stringify(this.editTask), //转换为JSON
+                        contentType: 'application/json;charset=utf-8',
+                        dataType: 'json',
+                        success: (r) => {
+                            if (r.result){
+                                $('#myModal').modal('hide');
+                                console.log(r);
+                                app.loadAllTask();
+                            }else {
+                                alert('修改失败');
+                            }
+
+
+                        },
+                        error: () => {
+                            alert('提交请求失败');
+                        }
+                    })
+                }
+                ,
+                //完成更新任务
+                endTask: function (id) {
+                    $.getJSON("/task/endTask/" + id, (r) => { //箭头函数，省略self中间变量
+                        this.loadAllTask();
+                    })
+                },
+            }
+        })
+        app.currentUser();
+        // app.loadAllTask();
+
+        $('#mochu').change(function () {
+            //输出选中项的值
+            console.log($(this).val());
+            this.snapTask.state = ($(this).val());
+        })
+    </script>
+</div>
+</body>
+</html>

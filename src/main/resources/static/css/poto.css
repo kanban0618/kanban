@@ -1,0 +1,97 @@
+html,body{
+    width: 100%;
+    height: 100%;
+}
+*{
+    margin: 0px;
+    padding: 0px;
+}
+.box-connertai {
+    width: 100%;
+    height: 100%;
+}
+
+.el-container {
+    height: 100%;
+    background-image: url('/img/desktop_4.jpg');
+    background-size: 100% 100%;
+}
+.el-container .el-checkbox {
+    margin-left: 35px;
+}
+.el-container .el-main {
+    display: flex;
+    justify-content: center;
+    overflow: none;
+    height: 100%;
+}
+.el-container .el-main .tspo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.el-container .el-main .tspo .rotp {
+    width: 430px;
+    height: 480px;
+    background: white;
+}
+.el-container .el-main .tspo .rotp .inp {
+    width: 60%;
+}
+.el-container .el-main .tspo .rotp .miten {
+    margin-left: -50px;
+}
+.el-container .el-main .tspo .rotp .el-input {
+    left: -50px;
+}
+.el-container .el-main .tspo .rotp .el-input .el-input__inner {
+    border: 0px;
+    border-bottom: 1px solid #dcdfe6;
+}
+.el-container .el-main .tspo .top_lis {
+    display: flex;
+    justify-content: space-between;
+}
+.el-container .el-main .tspo .top_lis :nth-child(2) {
+    margin-right: 50px;
+}
+.el-container .el-main .tspo .mont {
+    width: 430px;
+    height: 480px;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 248, 0.5);
+    text-align: center;
+}
+.el-container .el-main .tspo .mont .crt {
+    margin-top: 73px;
+}
+.el-container .el-main .tspo .mont :nth-child(1) {
+    font-size: 40px;
+    background-clip: text;
+    -webkit-background-clip:text;
+    color: transparent;
+    background-image: linear-gradient(120deg, #30cfd0 0%, #ebbba7 50%, #a3bded 80%);
+}
+.el-container .el-main .tspo .mont :nth-child(2) {
+    font-size: 50px;
+    background-clip: text;
+    -webkit-background-clip:text;
+    color: transparent;
+    background-image: linear-gradient(-90deg, #29be0e 0%, #276ace 100%);
+}
+.el-container .el-button--primary {
+    width: 200px;
+    border-radius: 30px;
+    background-image: linear-gradient(-90deg, #29bdd9 0%, #276ace 100%);
+}
+.el-container h1 {
+    font-size: 50px;
+    text-align: center;
+}
+.el-container .el-card__body {
+    margin-top: 25px;
+}
+.el-container .el-form-item {
+    margin-top: 50px;
+}
+/*# sourceMappingURL=login.css.map */

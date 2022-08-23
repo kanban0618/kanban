@@ -1,0 +1,82 @@
+.el-container {
+  height: 100%;
+  background-image: url('/public/desktop_4.jpg');
+  background-size: 100% 100%;
+  .el-checkbox {
+    margin-left: 35px;
+  }
+  .el-main {
+    display: flex;
+    justify-content: center;
+    overflow: none;
+    height: 100%;
+    .tspo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .rotp {
+        width: 430px;
+        height: 480px;
+        background: white;
+        .inp {
+          width: 60%;
+        }
+        .miten {
+          margin-left: -50px;
+        }
+        .el-input {
+          left: -50px;
+          /deep/ .el-input__inner {
+            border: 0px;
+            border-bottom: 1px solid #dcdfe6;
+          }
+        }
+      }
+      .top_lis {
+        display: flex;
+        justify-content: space-between;
+        :nth-child(2) {
+          margin-right: 50px;
+        }
+      }
+      .mont {
+        width: 430px;
+        height: 480px;
+        border-radius: 4px;
+        background-color: rgba(255, 255, 248, 0.5);
+        text-align: center;
+        .crt {
+          margin-top: 73px;
+        }
+        :nth-child(1) {
+          font-size: 40px;
+          background-clip: text;
+          color: transparent;
+          background-image: linear-gradient(120deg, #30cfd0 0%, #ebbba7 50%, #a3bded 80%);
+        }
+        :nth-child(2) {
+          font-size: 50px;
+          background-clip: text;
+          color: transparent;
+          background-image: linear-gradient(-90deg, #29be0e 0%, #276ace 100%);
+        }
+      }
+    }
+  }
+  .el-button--primary {
+    width: 200px;
+    border-radius: 30px;
+    background-image: linear-gradient(-90deg, #29bdd9 0%, #276ace 100%);
+  }
+
+  h1 {
+    font-size: 50px;
+    text-align: center;
+  }
+  .el-card__body {
+    margin-top: 25px;
+  }
+  .el-form-item {
+    margin-top: 50px;
+  }
+}

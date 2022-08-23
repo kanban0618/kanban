@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/favicon.ico">
+    <link rel="canonical" href="https://getbootstrap.com/docs/3.4/examples/navbar-static-top/">
+
+    <title>Static Top Navbar Example for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../css/bootstrap.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/css/ie10-viewport-bug-workaround.css"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/examples/navbar-static-top/navbar-static-top.css"
+          rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]>
+    <script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/js/ie8-responsive-file-warning.js"></script>
+    <![endif]-->
+    <script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div id="app" class="container-fluid"><!-- Vue绑定-->
+
+    <!-- Static navbar -->
+    <nav class="navbar navbar-default navbar-static-top ">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">看板</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">首页</a></li>
+                    <li><a href="#">关于</a></li>
+                    <li><a href="#">联系我们</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">工作流 <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">待办故事</a></li>
+                            <li><a href="#">迭代任务</a></li>
+                            <li><a href="#">后端开发</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li class="dropdown-header">前端开发</li>
+                            <li><a href="#">软件测试</a></li>
+                            <li><a href="#">运行维护</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <button type="submit" class="btn btn-info btn-sm" @click="login">登录</button>
+
+                    <li><a href="#">
+                        welcome {{currentUser.name}}</a></li>
+                    <li><a href="../../login.html">退出</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-success">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">功能操作区</div>
+                    <div class="panel-body">
+                        <div class="list-group">
+                            <a href="/sub/flow/flow.html" class="list-group-item">工作流管理</a>
+                            <a href="/sub/story/story.html" class="list-group-item active">
+                                故事管理
+                            </a>
+                            <a href="/sub/task/task.html" class="list-group-item">任务管理</a>
+                            <a href="/sub/user/user.html" class="list-group-item">用户管理</a>
+                            <a href="/sub/kanban/kanban.html" class="list-group-item">看板墙</a>
+                        </div>
+                    </div>
+                </div>
+
+                <form>
+                    <tabel>
+                        <td><label>
+                            <input type="text" class="form-control" id="story" placeholder="please input id">
+                            <input type="button" class="btn btn-primary" name="name" onclick="app.findByUserName()"
+                                   value="查询">
+                            <input type="button" class="btn btn-primary" name="inquiryAll" onclick="app.loadAllStory()"
+                                   value="查询全部">
+                        </label></td>
+                    </tabel>
+                </form>
+
+            </div>
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">内容显示区</div>
+                    <div class="panel-body">
+
+
+                        <!--添加表单主体-->
+                        <form action="/story/update/" method="post"><!-- inline:内联表单 -->
+
+                            <div class="col-md-4">
+
+                                <div class="form-group">
+                                    <label class="sr-only">标题</label>
+                                    <input type="text" class="form-control" id="title" placeholder="标题"
+                                           v-model="editStory.title">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="sr-only">发起人</label>
+                                    <input type="text" class="form-control" id="originator" placeholder="发起人"
+                                           v-model="editStory.originator">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="sr-only">负责人</label>
+                                    <input type="text" class="form-control" id="personInCharge" placeholder="负责人"
+                                           v-model="editStory.personInCharge">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="sr-only">状态</label>
+                                    <input type="text" class="form-control" id="state" placeholder="状态"
+                                           v-model="editStory.state">
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="sr-only">估算点</label>
+                                    <input type="number" class="form-control" id="estimationPoint" placeholder="估算点"
+                                           v-model="editStory.estimationPoint">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="sr-only">工作流Id</label>
+                                    <input type="number" class="form-control" id="flowId" placeholder="工作流Id"
+                                           v-model="editStory.flowId">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="sr-only">工作流Id</label>
+                                    <input type="number" class="form-control" id="sort" placeholder="排序"
+                                           v-model="editStory.sort">
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="sr-only">内容</label>
+                                    <textarea class="form-control" rows="16" id="content" placeholder="内容"
+                                              v-model="editStory.content"></textarea>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>发布时间</label>
+                                    <input type="datetime-local" class="form-control" id="releaseTime"
+                                           placeholder="发布时间"
+                                           v-model="editStory.releaseTime">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>预估完成时间</label>
+                                    <input type="datetime-local" class="form-control" id="estComTime"
+                                           placeholder="预估完成时间"
+                                           v-model="editStory.estComTime">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>实际完成时间</label>
+                                    <input type="datetime-local" class="form-control" id="actComTime"
+                                           placeholder="实际完成时间"
+                                           v-model="editStory.actComTime">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>更新时间</label>
+                                    <input type="datetime-local" class="form-control" id="updateTime" placeholder="更新时间"
+                                           v-model="editStory.updateTime" readonly>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- Contextual button for informational alert messages -->
+                        <button type="button" class="btn btn-info" @click="saveStory" style="float: right">
+                            点击添加
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table">
+                <tr>
+                    <th>主键</th>
+                    <th>标题</th>
+                    <th>发起人</th>
+                    <th>负责人</th>
+                    <th>内容</th>
+                    <th>估算点</th>
+                    <th>工作流外键</th>
+                    <th>状态</th>
+                    <th>发布时间</th>
+                    <th>预计完成时间</th>
+                    <th>实际完成时间</th>
+                    <th>创建时间</th>
+                    <th>更新时间</th>
+                </tr>
+                <tr v-for="(s,index) in storys" :key="s.id"><!-- v-for 类似foreach for(list s: lists)-->
+                    <td>{{s.id}}</td>
+                    <td>{{s.title}}</td>
+                    <td>{{s.originator}}</td>
+                    <td>{{s.personInCharge}}</td>
+                    <td>{{s.content}}</td>
+                    <td>{{s.estimationPoint}}</td>
+                    <td>{{s.flowId}}</td>
+                    <td>{{s.state}}</td>
+                    <td>{{s.releaseTime}}</td>
+                    <td>{{s.estComTime}}</td>
+                    <td>{{s.actComTime}}</td>
+                    <td>{{s.createTime}}</td>
+                    <td>{{s.updateTime}}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" @click="deleteUserById(s.id,index)">删除</button>
+                        <button class="btn btn-info btn-sm" @click="editStoryById(s.id,index)">编辑</button>
+                    </td>
+                </tr>
+
+                <tr :class="hideEditView?'hidden':''">
+                    <td><input type="hidden" v-model="editStory.id"></td>
+                    <td><input type="text" v-model="editStory.title"></td>
+                    <td><input type="text" v-model="editStory.originator"></td>
+                    <td><input type="text" v-model="editStory.personInCharge"></td>
+                    <td><input type="text" v-model="editStory.content"></td>
+                    <td><input type="number" v-model="editStory.estimationPoint"></td>
+                    <td><input type="number" v-model="editStory.flowId"></td>
+                    <td><input type="text" v-model="editStory.state"></td>
+                    <td><input type="datetime-local" v-model="editStory.releaseTime"></td>
+                    <td><input type="datetime-local" v-model="editStory.estComTime"></td>
+                    <td><input type="datetime-local" v-model="editStory.actComTime"></td>
+                    <td><input type="datetime-local" v-model="editStory.createTime"></td>
+                    <td><input type="datetime-local" v-model="editStory.updateTime"></td>
+                    <td><input type="number" v-model="editStory.sort"></td>
+                    <td>
+                        <button @click="updateStoryById" class="btn btn-success btn-sm">更新</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="../../js/jquery-1.12.4.min.js"
+        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+        crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="../../js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="../../js/vue2.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',//vue元素绑定， 控制视图层
+        data: {//Model：数据
+            storys: [],
+            editStory: {
+                id: 0,
+                title: '',
+                originator: '',
+                personInCharge: '',
+                content: '',
+                estimationPoint: '',
+                flowId: '',
+                state: '',
+                releaseTime: '',
+                estComTime: '',
+                actComTime: '',
+                createTime: '',
+                updateTime: '',
+                sort: '',
+            },//编辑故事
+            editUser:{
+                id:0,
+                name:'',
+                username:'',
+                password:'',
+                jobno:'',
+                position:''
+            }, //编辑用户
+            hideEditView: true, //是否显示编辑视图
+            currentUser: {},
+        },
+        methods: {
+            loadAllStory: function () {
+                var self = this;
+                $.getJSON("/story/all", function (r) {
+                    console.log(r);
+                    self.storys = r.data;
+                })
+            },
+
+            deleteUserById: function (id, index) {
+                var self = this;
+                $.getJSON("/story/delete/" + id, function (r) {
+                    self.storys.splice(story, 1);
+                })
+            },
+
+            saveStory: function () {
+                $.ajax({
+                    url: '/story/save',
+                    type: 'POST',
+                    data: JSON.stringify(this.editStory),
+                    contentType: 'application/json;charset=utf-8',
+                    dataType: 'json',
+                    success: (r) => {
+                        this.hideEditView = true;
+                        console.log(r.data);
+                    },
+                    error: () => {
+                        alert("添加失败");
+                    }
+                })
+            },
+
+            editStoryById: function (id, idx) {
+                this.hideEditView = !this.hideEditView;//不隐藏
+                this.editStory = this.storys[idx];
+            },
+
+            updateStoryById: function () {
+                $.ajax({
+                    url: '/story/update',
+                    type: 'POST',
+                    data: JSON.stringify(this.editStory),
+                    contentType: 'application/json;charset=utf-8',
+                    dataType: 'json',
+                    success: (r) => {
+                        this.hideEditView = true;
+                        console.log(r.data);
+                    },
+                    error: () => {
+                        alert("更新失败");
+                    }
+                })
+            },
+
+            inquiry: function () {
+                var self = this;
+                var value = $("#story").val()
+                $.getJSON("/story/findByName/" + value, function (r) {
+                    console.log(r);
+                    self.tasks = r;
+                })
+            },
+
+            //查找当前正在登录的用户
+            loadCurrentUser: function () {
+                $.getJSON("/user/currentUser", (r) => {
+                    if (r.result) {
+                        this.currentUser = r.data;//如果登录结果为true，则将msg中的data传入currentUser
+                    }
+                })
+            },
+
+            //登录
+            login:function() {
+                $.ajax({
+                    url:'/login/doLogin',
+                    type:'POST',
+                    data: JSON.stringify(this.editUser , this.editUser), //转换为JSON
+                    contentType:'application/json;charset=utf-8',
+                    dataType:'json',
+                    success:(r) => {
+                        this.hideEditView = true;//不隐藏
+                        console.log(r.data);
+                    },
+                    error:()=> {
+                        alert('提交请求失败');
+                    }
+                })
+            },
+
+
+        }
+    })
+    app.loadCurrentUser();//程序启动时响应
+    app.loadAllStory();
+</script>
+</body>
+</html>

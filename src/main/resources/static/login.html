@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="/css/element-index.css">
+  <link href="/css/poto.css" rel="stylesheet">
+</head>
+<body>
+<div class="box-connertai">
+  <el-container>
+    <el-main>
+      <div class="tspo">
+        <div class="mont">
+          <div class="crt">
+            <p>Welcome</p>
+            <div>看板系统登录界面</div>
+          </div>
+        </div>
+        <el-form ref="form" label-width="80px" class="rotp">
+          <div style="margin-top: 100px">
+            <el-form-item>
+              <el-input
+                      prefix-icon="el-icon-user-solid "
+                      v-model.trim="text"
+                      placeholder="请输入账号"
+                      clearable
+                      @keyup.enter.native="keyupTest"
+              ></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input
+                      prefix-icon="el-icon-lock"
+                      v-model.trim="password"
+                      type="password"
+                      placeholder="请输入密码"
+                      clearable
+                      show-password
+                      @keyup.enter.native="keyupTest"
+              ></el-input>
+            </el-form-item>
+            <div class="top_lis">
+              <el-checkbox v-model.trim="checked">记住密码</el-checkbox>
+              <!-- 超链接跳转 -->
+              <a href="forgetPassword.html">忘记密码</a>
+            </div>
+            <el-form-item style="margin-left: 50px">
+              <el-button type="primary" @click="skip">登录</el-button>
+            </el-form-item>
+          </div>
+        </el-form>
+      </div>
+    </el-main>
+  </el-container>
+</div>
+<script src="/js/vue2.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/1.0.0-alpha.1/axios.js"></script>
+<!-- 样式 结构 -->
+<script src="/js/element.ui.js"></script>
+<script>
+    const vm = new Vue({
+        data() {
+            return {
+                text: '',
+                password: '',
+                verification: '',
+                checked: false
+            }
+        },
+        methods: {
+            // 用户表数据调用
+            skip() {
+                if (this.password == '' || this.text == '') {
+                    this.$message.error('账号密码不能为空')
+                    return
+                }
+                axios.post('/login/doLogin', {
+                    username: this.text,
+                    password: this.password
+                })
+                    .then(res => {
+                        if (res.data.result == true) {
+                            console.log(res.data)
+                            location.href = '/sub/kanban/kanban.html'
+                            this.text = '', this.password = ''
+                        } else {
+                            this.$message.error('账号密码错误')
+                        }
+
+                    })
+                    .catch(error => {
+                        this.$message.error('数据错误')
+                    })
+            },
+            // 回车事件
+            keyupTest() {
+                this.skip()
+                this.text = '', this.password = ''
+            }
+        }
+    }).$mount(".box-connertai")
+</script>
+</body>
+
+</html>

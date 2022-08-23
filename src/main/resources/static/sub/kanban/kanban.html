@@ -1,0 +1,668 @@
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/favicon.ico">
+  <link rel="canonical" href="https://getbootstrap.com/docs/3.4/examples/navbar-static-top/">
+
+  <title>User</title>
+
+  <!-- Bootstrap core CSS -->
+
+  <link rel="stylesheet" href="/css/element-index.css">
+  <link href="/css/kanban.css" rel="stylesheet">
+  <link href="/css/bootstrap.css" rel="stylesheet">
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <link href="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/examples/navbar-static-top/navbar-static-top.css" rel="stylesheet">
+
+  <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+  <!--[if lt IE 9]><script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+  <script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/js/ie-emulation-modes-warning.js"></script>
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <style>
+
+
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <!-- Static navbar -->
+  <nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">看板</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">首页</a></li>
+          <li><a href="#">关于</a></li>
+          <li><a href="#">联系我们</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">工作流 <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">待办故事</a></li>
+              <li><a href="#">迭代任务</a></li>
+              <li><a href="#">后端开发</a></li>
+              <li role="separator" class="divider"></li>
+              <li class="dropdown-header">前端开发</li>
+              <li><a href="#">软件测试</a></li>
+              <li><a href="#">运行维护</a></li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <div>
+            <el-menu
+                    :default-active="activeIndex"
+                    class="el-menu-demo"
+                    mode="horizontal"
+            >
+              <el-menu-item class="usnm">
+                <div v-if="username == ''">
+                  <a href="/login.html">
+                    <p>你好,请点击登录</p>
+                  </a>
+                </div>
+                <el-dropdown>
+              <span class="el-dropdown-link">
+                <div v-if="username != ''">用户:{{ username }}</div>
+              </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="unsubscribe">注销登录</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </el-menu-item>
+            </el-menu>
+          </div>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav>
+
+
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col-md-1">
+        <div class="panel panel-success">
+          <!-- Default panel contents -->
+          <div class="panel-heading">功能操作区</div>
+          <div class="panel-body">
+            <div class="list-group">
+              <a href="/sub/flow/flow.html" class="list-group-item ">
+                工作流管理
+              </a>
+              <a href="/sub/story/story.html" class="list-group-item">故事管理</a>
+              <a href="/sub/task/task.html" class="list-group-item">任务管理</a>
+              <a href="/sub/user/user.html" class="list-group-item">用户管理</a>
+              <a href="/sub/kanban/kanban.html" class="list-group-item active">看板墙</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-11 boto">
+        <div class="topda">
+          <el-container>
+            <!-- 头部导航 -->
+            <el-header>
+              <div style="width: 30%">
+                <el-button
+                        type="primary"
+                        icon="el-icon-edit"
+                        @click.native="addtod"
+                >新建</el-button>
+                <el-input
+                        style="width: 70%"
+                        v-model="newren.workname"
+                        v-if="fope"
+                        @blur="adds"
+                        placeholder="请输入工作流名称"
+                ></el-input>
+              </div>
+            </el-header>
+            <!-- 所有文章 -->
+            <el-container>
+
+              <!-- 主页内容 -->
+              <el-main>
+                <div class="board">
+                  <div
+                          class="board-left"
+                          v-for="(value, i) in boxmaxList"
+                          :key="value.id"
+                  >
+                    <el-card shadow="hover">
+                      <div class="letn">
+                        <p style="margin: 0px">{{ value.workname }}</p>
+                        <el-dropdown trigger="click">
+                    <span class="el-dropdown-link"><i
+                            class="el-icon-plus"
+                            style="margin-top: 0.5rem"
+                    ></i></span>
+                          <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item @click.native="addds(value.sort)">添加任务流</el-dropdown-item>
+
+                            <el-dropdown-item @click.native="dels(value.id)">删除工作流</el-dropdown-item>
+                          </el-dropdown-menu>
+                        </el-dropdown>
+                      </div>
+                    </el-card>
+                    <!-- 卡片内容 -->
+                    <div v-if="taskall && taskall.length">
+                      <div
+                              class="left-one"
+                              v-for="(item, index) in taskall.filter(row => row.flowid == i + 1)"
+                              :key="index"
+                      >
+                        <el-card
+                                class="box-card"
+                                shadow="hover"
+                        >
+                          <div slot="header">
+                            <div class="rspo"><i
+                                    class="el-icon-close"
+                                    @click="del(item.id)"
+                            ></i></div>
+                            <div class="clearfix">
+                              <div>
+                                <el-tag>编号:{{ item.flowid }}</el-tag>
+                              </div>
+                              <div class="settwo">
+                                <el-tag>工作时长:{{ item.ectime }}</el-tag>
+                              </div>
+                            </div>
+                          </div>
+                          <div @click="donu(item.id, item.flowid, item.sort)">
+                            <div class="setthree">
+                              <el-tag>内容:</el-tag>
+                              <br />
+                              {{ item.content }}
+                            </div>
+                            <div class="affiliation">
+                              <el-tag>故事归属：</el-tag>
+                              {{ item.title }}
+                            </div>
+                          </div>
+                        </el-card>
+
+                        <div class="finally">
+                          <!-- 将后台的值得到后给todaiban这个对象让他成为一个用数组包裹的数据，并对其他的数据互不干扰 -->
+                          <!-- 下拉框 -->
+                          <el-select
+                                  class="sel"
+                                  v-model="item.name"
+                                  multiple
+                          >
+                            <el-option
+                                    v-for="rou in allList"
+                                    :key="rou.id"
+                                    :value="rou.id"
+                                    :label="rou.name"
+                            ></el-option>
+                          </el-select>
+                          <!-- 前后移动 -->
+                          <select
+                                  class="sel"
+                                  style="width:50px"
+                                  @change="e => handleChange(e, item, value.sort + 1)"
+                          >
+                            <option value="1">{{ other }}</option>
+                            <option value="2">{{ pro }}</option>
+                            <option value="4">{{ back }}</option>
+                          </select>
+
+                          <!-- 选择跳转 -->
+                          <select
+                                  class="sel"
+                                  style="width:50px"
+                                  @change="e => skips(e, item, value.sort + 1)"
+                          >
+                            <option value="0">跳转</option>
+
+                            <option
+                                    v-for="(k,index1) in boxmaxList"
+                                    :key="k.sort"
+                                    :value="index1+1"
+                            >{{k.workname}}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- 添加小卡片的功能 -->
+                    <el-dialog
+                            width="33.25rem"
+                            :visible.sync="visible"
+                            title="新增事件"
+                    >
+                      <div style="margin-bottom: 1.5rem">
+                        <el-tag
+                                size="small"
+                                style="margin-right: 0.5rem"
+                        >工作归属</el-tag>
+                        <el-input
+                                v-model="todaiban.title"
+                                size="small"
+                                style="width: 18.75rem"
+                                placeholder="请输入工作归属"
+                        ></el-input>
+                      </div>
+                      <div style="margin-bottom: 1.5rem">
+                        <el-tag
+                                size="small"
+                                style="margin-right: 0.5rem"
+                        >工作时长</el-tag>
+                        <el-input
+                                v-model="todaiban.ectime"
+                                size="small"
+                                style="width: 18.75rem"
+                                placeholder="请输入工作时长"
+                                type="datetime-local"
+                        ></el-input>
+                      </div>
+                      <div style="margin-bottom: 1.5rem">
+                        <el-input
+                                type="textarea"
+                                :autosize="{ minRows: 2, maxRows: 4 }"
+                                placeholder="请输入内容"
+                                v-model="todaiban.content"
+                        ></el-input>
+                      </div>
+                      <div style="text-align: right">
+                        <el-button
+                                size="small"
+                                @click="visible = false"
+                        >取消</el-button>
+                        <el-button
+                                size="small"
+                                @click="tijiao"
+                                type="primary"
+                        >新增</el-button>
+                      </div>
+                    </el-dialog>
+                    <!-- 更改小卡片的功能 -->
+                    <el-dialog
+                            width="33.25rem"
+                            :visible.sync="tovisible"
+                            title="更改内容"
+                    >
+                      <div style="margin-bottom: 1.5rem">
+                        <el-tag
+                                size="small"
+                                style="margin-right: 0.5rem"
+                        >更改工作归属</el-tag>
+                        <el-input
+                                v-model="todaiban.title"
+                                size="small"
+                                style="width: 18.75rem"
+                                placeholder="修改工作归属"
+                        ></el-input>
+                      </div>
+
+                      <div style="margin-bottom: 1.5rem">
+                        <el-tag
+                                size="small"
+                                style="margin-right: 0.5rem"
+                        >更改工作时长</el-tag>
+                        <el-input
+                                v-model="todaiban.ectime"
+                                size="small"
+                                style="width: 18.75rem"
+                                placeholder="修改工作时长"
+                                type="datetime-local"
+                        ></el-input>
+                      </div>
+                      <div style="margin-bottom: 1.5rem">
+                        <el-input
+                                type="textarea"
+                                :autosize="{ minRows: 2, maxRows: 4 }"
+                                placeholder="修改内容"
+                                v-model="todaiban.content"
+                        ></el-input>
+                      </div>
+                      <div style="text-align: right">
+                        <el-button
+                                size="small"
+                                @click="tovisible = false"
+                        >取消</el-button>
+                        <el-button
+                                size="small"
+                                @click="gengai"
+                                type="primary"
+                        >新增</el-button>
+                      </div>
+                    </el-dialog>
+                  </div>
+                </div>
+              </el-main>
+            </el-container>
+          </el-container>
+        </div>
+      </div>
+    </div>
+  </div><!-- /container -->
+
+</div>
+<script src="/js/vue2.js"></script>
+<script src="/js/vue2.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/1.0.0-alpha.1/axios.js"></script>
+<!-- 样式 结构 -->
+<script src="/js/element.ui.js"></script>
+<script>
+ const vm=new Vue({
+     data() {
+         return {
+             // 这个用来装载v-model的数据，然后将数据装入数组之中去
+             // 这个todaiban就是用来传送数据的
+             todaiban: {
+                 ectime: '',
+                 title: '',
+                 content: '',
+                 // 用来装载获得数据，并对其选择数据的互补干扰
+                 name: ''
+             },
+             sortid: '',
+             taskid: '',
+             taskflow: '',
+             fope: false,
+             // 新增任务对象
+             newren: {
+                 workname: ''
+             },
+
+             visible: false,
+             tovisible: false,
+             pro: '前进',
+             other: '其他功能',
+             succeed: '完成',
+             back: '后退',
+             // 负责人的数组
+             principal: [],
+             // 用来存储多个负责人的数组
+             rowList: [],
+             // nav的数组对象的接受
+             // 用来渲染名字
+             boxmaxList: [],
+             // task/all的方法数组
+             taskall: [],
+             allList: [],
+             activeIndex: '1',
+             activeIndex2: '1',
+             username: [],
+             // 获取工作流的id
+             workID: ''
+         }
+     },
+     methods: {
+         addtod() {
+             if (!this.fope) {
+                 this.fope = true
+             } else {
+                 this.fope = false
+             }
+         },
+         addds(val) {
+             // 点击工作流将工作流id保存下来
+             console.log((this.workID = val))
+             this.visible = true
+         },
+         // 登录用户
+         user() {
+             axios
+                 .get('/user/currentUser')
+                 .then(res => {
+                     if ((res.data.result = true)) console.log((this.username = res.data.data.name))
+                 })
+                 .catch(error => {
+                     // this.$message.error('数据错误')
+
+                     location.href='/login.html'
+                 })
+         },
+         // 注销登录跳到登录页面
+         unsubscribe() {
+             axios.get('/login/logout').then(reston => {
+                 console.log(reston.data)
+             })
+             location.href='/login.html'
+         },
+         // 卡片值的修改
+         xiugai() {
+             axios
+                 .post('/task/update', {
+                     id: this.taskid,
+                     sort: this.sortid,
+                     flowid: this.taskflow,
+                     title: this.todaiban.title,
+                     ectime: this.todaiban.ectime,
+                     content: this.todaiban.content
+                 })
+                 .then(res => {
+                     // location.reload()
+                     // 将数组解构出给arr
+                     const arr = [...this.taskall]
+                     const index = arr.findIndex(item => item.id == this.taskid)
+                     const task = arr.find(item => item.id == this.taskid)
+                     if (index) {
+                         arr[index] = {
+                             ...task,
+                             id: this.taskid,
+                             sort: this.sortid,
+                             flowid: this.taskflow,
+                             title: this.todaiban.title,
+                             ectime: this.todaiban.ectime,
+                             content: this.todaiban.content
+                         }
+                         this.taskall = arr
+                         console.log(this.taskall), (this.todaiban.ectime = ''), (this.todaiban.title = ''), (this.todaiban.content = '')
+                     }
+
+                     this.tovisible = false
+                 })
+         },
+         // 修改任务,将获取的值进行更改
+         donu(val, e, sort) {
+             console.log((this.taskid = val))
+             console.log((this.sortid = sort))
+             console.log((this.taskflow = e))
+
+             this.tovisible = true
+         },
+         //卡片值修改提交
+         gengai() {
+             this.xiugai()
+         },
+         // 添加任务流
+         tijiao() {
+             axios
+                 .post('/task/save', {
+                     sort: Math.floor(Math.random() * 100000 + 1),
+                     flowid: this.workID,
+                     id: this.taskall.length + 1,
+                     title: this.todaiban.title,
+                     ectime: this.todaiban.ectime,
+                     content: this.todaiban.content
+                 })
+                 .then(res => {
+                     // 这个将this.todaiban添加到rowList这个数组里面去
+                     this.taskall.push({
+                         sort: Math.floor(Math.random() * 100000 + 1),
+                         ectime: this.todaiban.ectime,
+                         title: this.todaiban.title,
+                         content: this.todaiban.content,
+                         id: this.taskall.length + 1,
+                         flowid: this.workID
+                     }),
+                         (this.todaiban.ectime = ''),
+                         (this.todaiban.title = ''),
+                         (this.todaiban.content = '')
+                     this.visible = false
+                 })
+                 .catch(() => {
+                     console.log('请求错误')
+                 })
+         },
+         // 工作流跳转
+         skips(e, row, type) {
+             console.log(row)
+             axios
+                 .post('/task/update', {
+                     // row.id指定哪一个唯一id值进行更改，这个唯一id不能乱传
+                     id: row.id,
+                     sort:Math.floor(Math.random() * 100000 + 1),
+                     // row.flowid 是用来进行筛选的跳转
+                     flowid: (row.flowid = e.target.value)
+                 })
+                 .then(response => {
+                     console.log(response.data)
+                 })
+                 .catch(() => {
+                     console.log('请求错误')
+                 })
+             // // 点击跳转后就将值变回value为1
+             e.target.value = 0
+         },
+         // 当我点击了这个下一个工作流程后，将点击的盒子删除，将数据(是一个对象形式的)用push给传到下一个数组里面去，这就完成了移动数据
+         // type 要转换成那一列里面
+         handleChange(e, row, type) {
+             console.log(row)
+             console.log(type)
+             // 盒子里面没有了，就不用再往下移动了
+             // if (this.boxmaxList.findIndex(item => item.sort == type) == -1) return
+             // 点击的是option里面的value值
+             // console.log(e.target.value)
+             if (e.target.value == 2) {
+                 axios
+                     .post('/task/update', {
+                         // row.id指定哪一个唯一id值进行更改，这个唯一id不能乱传
+                         id: row.id,
+                         sort: row.sort,
+                         flowid: (row.flowid = type)
+                     })
+                     .then(response => {
+                         console.log(response.data)
+                     })
+                     .catch(() => {
+                         console.log('请求错误')
+                     })
+                 // // 点击跳转后就将值变回value为1
+                 e.target.value = 1
+             }
+             if (e.target.value == 4) {
+                axios
+                     .post('/task/update', {
+                         // row.id指定哪一个唯一id值进行更改，这个唯一id不能乱传
+                         id: row.id,
+                         sort: row.sort,
+                         flowid: (row.flowid = type - 2)
+                     })
+                     .then(response => {
+                         console.log(response.data)
+                     })
+                     .catch(() => {
+                         console.log('请求错误')
+                     })
+                 // // 点击跳转后就将值变回value为1
+                 e.target.value = 1
+             }
+         },
+         // 添加工作流
+         adds() {
+             if (this.newren.workname == '') return
+             axios
+                 .post('/flow/save', {
+                     sort: this.boxmaxList.length + 1,
+                     workname: this.newren.workname
+                 })
+                 .then(res => {
+                     console.log(res.data)
+                     this.boxmaxList.push({
+                         workname: this.newren.workname
+                     })
+                     location.reload()
+                     this.newren.workname = ''
+                 })
+         },
+
+         // 删除工作流
+         dels(val) {
+             console.log(val)
+             axios({
+                 type: 'get',
+                 url: '/flow/delete/' + val
+             }).then(res => {
+                 console.log(res.data)
+                 this.boxmaxList = this.boxmaxList.filter(item => item.id != val)
+             })
+         },
+         // 后端接口的使用
+         async Port_calls() {
+             const { data: res } = await axios.get('/flow/all')
+             if (res.result == true) console.log((this.boxmaxList = res.data))
+             const { data: datares } = await axios.get('/task/all')
+             if (datares.result == true) console.log((this.taskall = datares.data))
+             const { data: respone } = await axios.get('/user/all')
+             if (respone.result == true) console.log((this.allList = respone.data))
+         },
+         // 进行是否删除的提示
+         del(val) {
+             console.log(val)
+             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                 confirmButtonText: '确定',
+                 cancelButtonText: '取消',
+                 type: 'warning'
+             })
+                 .then(() => {
+                     this.$message({
+                         // type是代表的颜色样式
+                         type: 'success',
+                         // 出现的文字
+                         message: '删除成功!'
+                     })
+                     axios({
+                         type: 'get',
+                         url: '/task/delete/' + val
+                     }).then(res => {
+                         console.log(res.data)
+                         this.taskall = this.taskall.filter(item => item.id != val)
+                     })
+                 })
+                 .catch(() => {
+                     this.$message({
+                         type: 'info',
+                         message: '已取消删除'
+                     })
+                 })
+         }
+     },
+
+     created() {
+         this.Port_calls()
+         // 登录用户的调用
+         this.user()
+     }
+ }).$mount('#app')
+</script>
+</body>
+</html>

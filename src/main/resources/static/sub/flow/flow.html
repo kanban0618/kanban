@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/favicon.ico">
+    <link rel="canonical" href="https://getbootstrap.com/docs/3.4/examples/navbar-static-top/">
+
+    <title>工作流管理</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/css/ie10-viewport-bug-workaround.css"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/examples/navbar-static-top/navbar-static-top.css"
+          rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]>
+    <script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/js/ie8-responsive-file-warning.js"></script>
+    <![endif]-->
+    <script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div id="app" class="container-fluid">
+    <!-- Static navbar -->
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">看板</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">首页</a></li>
+                    <li><a href="#">关于</a></li>
+                    <li><a href="#">联系我们</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">工作流 <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">待办故事</a></li>
+                            <li><a href="#">迭代任务</a></li>
+                            <li><a href="#">后端开发</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li class="dropdown-header">前端开发</li>
+                            <li><a href="#">软件测试</a></li>
+                            <li><a href="#">运行维护</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- 用户信息 -->
+                <div style="text-align:right">
+                    <ul><p id="current_user"></p></ul>
+                </div>
+                <!-- 注销 -->
+                <div v-if="loginIf" style="text-align:right">
+                    <button @click="logout()" class="btn btn-danger">注销</button>
+                </div>
+            </div><!--/.nav-collapse -->
+        </div><!--/container-fluid -->
+    </nav>
+
+
+
+        <div class="col-md-4">
+            <div class="panel panel-success">
+                <!-- Default panel contents -->
+                <div class="panel-heading">功能操作区</div>
+                <div class="panel-body">
+                    <div class="list-group">
+                        <a class="list-group-item active" href="/sub/flow/flow.html">工作流管理</a>
+                        <a class="list-group-item" href="/sub/story/story.html">故事管理</a>
+                        <a class="list-group-item" href="/sub/task/task.html">任务管理</a>
+                        <a class="list-group-item" href="/sub/user/user.html">用户管理</a>
+                        <a class="list-group-item" href="/sub/kanban/kanban.html">看板墙</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="list-group-item active">工作流列表</div>
+                <!-- 账号 -->
+                <div class="panel panel-success">
+                    <div v-show="!loginIf" class="panel panel-success">
+                        <div class="panel-heading">添加账号</div>
+                        <div class="panel-body">
+                            <table>
+                                <tr>
+                                    <div>
+                                        <label for="exampleInputUsername">账号</label>
+                                        <span class="caret"></span>
+                                        <input placeholder="账号" class="form-control" id="exampleInputUsername"
+                                               type="text" v-model="user.username">
+                                    </div>
+                                </tr>
+                                <tr>
+                                    <div>
+                                        <label for="exampleInputPassword">密码</label>
+                                        <span class="caret"></span>
+                                        <input placeholder="密码" class="form-control" id="exampleInputPassword"
+                                               type="password" type="password" v-model="user.password">
+                                    </div>
+                                    <br>
+                                </tr>
+                                <div style="text-align:center">
+                                    <button @click="login()" class="btn btn-primary" style="width: 20%">登录账号</button>
+                                </div>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- 添加工作流 -->
+                    <div class="panel-heading">添加工作流</div>
+                    <div class="panel-body">
+                        <!-- Table -->
+                        <table>
+                            <tr :class="hideEditView?'hidden':''">
+                            <tr>
+                                <div>
+                                    <label for="exampleInputWorkname">工作流管理</label>
+                                    <span class="caret"></span>
+                                    <input type="text" v-model="editFlow.workname" class="form-control"
+                                           id="exampleInputWorkname" placeholder="请输入工作流"
+                                           onkeyup="value=value.replace(/[\d]/g,'') "
+                                           onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[\d]/g,''))"
+                                           maxlength=10 name="Numbers">
+                                </div>
+                            </tr>
+                            <br/>
+                            <tr>
+                                <div>
+                                    <label for="exampleInputCategory">类别</label>
+                                    <span class="caret"></span>
+                                    <input type="text" v-model="editFlow.category" class="form-control"
+                                           id="exampleInputCategory" placeholder="请输入工作流类别"
+                                           onkeyup="value=value.replace(/[\d]/g,'') "
+                                           onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[\d]/g,''))"
+                                           maxlength=10 name="Numbers">
+                                </div>
+                            </tr>
+                            <br/>
+                            <tr>
+                                <label for="exampleInputCapacity">在制品限制</label>
+                                <span class="caret"></span>
+                                <div class="input-group">
+                                    <span class="input-group-addon">123</span>
+                                    <input type="number" v-model.number="editFlow.capacity" class="form-control"
+                                           id="exampleInputCapacity" placeholder="请输入最大限制"
+                                           onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">
+                                </div>
+                            </tr>
+                            <br/>
+                            <tr>
+                                <button @click="addFlowByDefault" class="btn btn-success">点击添加</button>
+                                <button class="btn btn-info" @click="updateFlowById">点击更新</button>
+                            </tr>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- 工作流查询 -->
+                    <div class="panel-heading">工作流查询</div>
+                    <div class="panel-body">
+                        <table>
+                            <tr>
+                                <label for="exampleInputfindByName">查询栏</label>
+                                <span class="caret"></span>
+                                <input placeholder="请输入想要查询的内容" class="form-control" type="text"
+                                       id="exampleInputfindByName" style="width: 70%;margin: 0 auto"
+                                       v-model="shuru.neirong"></tr>
+                            <tr>
+                                <br/>
+                                <div style="text-align:center">
+                                    <button @click="query" class="btn btn-info">查询字段
+                                    </button>
+                                    <button @click="loadAllFlow" class="btn btn-info">
+                                        查询所有
+                                    </button>
+                                </div>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- 工作流显示 -->
+                    <div class="panel panel-success">
+                        <div class="panel-heading">工作流显示</div>
+                        <table class="table">
+                            <tr>
+                                <th>主键</th>
+                                <th>工作流</th>
+                                <th>类别</th>
+                                <th>在制品限制</th>
+                            </tr>
+                            <tr v-for="(f,index) in flows" :key="f.id">
+                                <td>{{f.id}}</td>
+                                <td>{{f.workname}}</td>
+                                <td>{{f.category}}</td>
+                                <td>{{f.capacity}}</td>
+                                <td>
+                                    <button class="btn btn-warning btn-sm" @click="deleteFlowById(f.id,index)">删除
+                                    </button>
+                                    <button class="btn btn-info btn-sm" @click="editFlowById(f.id,index)">编辑</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div><!--/panel panel-success-->
+                </div><!--/panel panel-success-->
+            </div><!--/panel panel-default-->
+        </div><!--/col-md-8-->
+</div><!-- /container-fluid-->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/js/jquery-1.12.4.js"
+            integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+            crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="/js/bootstrap.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="https://fastly.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.38/assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="/js/vue2.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                user: {
+                    id: 0,
+                    name: '',
+                    username: '',
+                    password: '',
+                    jobno: '',
+                    position: ''
+                },//用户
+                flows: [],
+                shuru: {
+                    neirong: ''
+                },//编辑
+                editFlow: {
+                    id: 0,
+                    workname: '',
+                    category: '',
+                    capacity: ''
+                }, //编辑工作流
+                hideEditView: true, //是否显示编辑视图
+                loginIf: false //用户显示
+            },
+            methods: {
+                //查询所有
+                loadAllFlow: function () {
+                    var self = this;
+                    $.getJSON("/flow/all", function (r) {
+                        currentUser = !null;
+                        console.log(r);
+                        self.flows = r.data;
+                    })
+                },
+                //删除工作流id
+                deleteFlowById: function (id, index) {
+                    var self = this;
+                    $.getJSON("/flow/delete/" + id, function (r) {
+                        self.flows.splice(index, 1);
+                    })
+                },
+                //模糊查询字段
+                query: function (id, index) {
+                    var self = this;
+                    $.getJSON("/flow/findByName/" + this.shuru.neirong, function (r) {
+                        self.flows.splice(index, 1);
+                    })
+                },
+                //添加工作流字段
+                addFlowByDefault: function () {
+                    $.ajax({
+                        url: '/flow/save',
+                        type: 'POST',
+                        data: JSON.stringify(this.editFlow), //转换为JSON
+                        contentType: 'application/json;charset=utf-8',
+                        dataType: 'json',
+                        success: (r) => {
+                            this.hideEditView = true;//不隐藏
+                            this.flows.push(r.data);
+                            console.log(r);
+                        },
+                        error: () => {
+                            alert('提交请求失败');
+                        }
+                    })
+                },
+                //编辑工作流
+                editFlowById: function (id, idx) {
+                    this.hideEditView = !this.hideEditView;//不隐藏
+                    this.editFlow = this.flows[idx];
+                },
+                //编辑工作流
+                updateFlowById: function () {
+                    $.ajax({
+                        url: '/flow/update',
+                        type: 'POST',
+                        data: JSON.stringify(this.editFlow), //转换为JSON
+                        contentType: 'application/json;charset=utf-8',
+                        dataType: 'json',
+                        success: (r) => {
+                            this.hideEditView = true;//不隐藏
+                            console.log(r);
+                        },
+                        error: () => {
+                            alert('提交请求失败');
+                        }
+                    })
+                },
+                //注销
+                logout: function () {
+                    $.getJSON("/login/logout", function (r) {
+                        self.user = null;
+
+                        if (r.result == false) {
+                            location.href = "/login.html";
+                        }
+                        app.currentUser();
+                    })
+                },
+                //登录
+                login: function () {
+                    const self = this;
+                    $.ajax({
+                        url: '/login/doLogin',
+                        type: 'POST',
+                        data: JSON.stringify(this.user), //转换为JSON
+                        contentType: 'application/json;charset=utf-8',
+                        dataType: 'json',
+                        success: (r) => {
+                            self.user = r.data;
+                            console.log(this.user);
+                            app.currentUser();
+                            app.loadAllFlow();
+                        },
+                        error: () => {
+                            alert('输入有误');
+                        }
+                    })
+                },
+                //显示当前用户
+                currentUser: function () {
+                    const self = this;
+                    $.getJSON("/user/currentUser", function (r) {
+                        console.log(r.result);
+                        if (r.result == true) {
+                            this.loginIf = true;
+                            const currentUser = document.getElementById("current_user");
+                            currentUser.innerHTML = r.data.name;
+                            self.loginIf = true;
+                        } else {
+                            self.loginIf = false;
+                            const currentUser = document.getElementById("current_user");
+                            currentUser.innerHTML = "请登录";
+                        }
+                    })
+                }
+
+
+            }
+        })
+        app.currentUser();
+    </script>
+</div>
+</body>
+</html>
+
